@@ -1,5 +1,4 @@
 import TicTacToe.Game;
-import TicTacToe.Options;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,187 +13,195 @@ public class TicTacToeTest {
 
     @Test
     void testThatGameBoardCanBeVisualized(){
-        game.designBoardPattern();
      assertEquals("""
-             |___|___|___|
-             |___|___|___|
-             |___|___|___|
+             EMPTY EMPTY EMPTY 
+             EMPTY EMPTY EMPTY 
+             EMPTY EMPTY EMPTY 
              """, game.visualizeBoard());
 
     }
 
     @Test
-    void testThatUserCanPlayGame(){
-        game.designBoardPattern();
+    void testThatPlayer1CanPlayGame(){
         game.visualizeBoard();
-        game.play(9);
+        game.playerOneGamePlay(9);
 
         assertEquals("""
-                |___|___|___|
-                |___|___|___|
-                |___|___| O |
-                """, game.visualizeBoard());
+                        EMPTY EMPTY EMPTY 
+                        EMPTY EMPTY EMPTY 
+                        EMPTY EMPTY O 
+                        """
+             , game.visualizeBoard());
         assertTrue(game.playerHasPlayed());
     }
+
+    @Test
+    void testThatPlayer2CanPlayGame(){
+        game.visualizeBoard();
+        game.playerTwoGamePlay(5);
+
+        assertEquals("""
+                        EMPTY EMPTY EMPTY 
+                        EMPTY X EMPTY 
+                        EMPTY EMPTY EMPTY 
+                        """
+                , game.visualizeBoard());
+        assertTrue(game.playerHasPlayed());
+    }
+
     @Test
     void testThatComputerCanPlayGame(){
-        game.designBoardPattern();
         game.visualizeBoard();
         game.computerPlay();
 
         assertTrue(game.computerHasPlayed());
     }
+
     @Test
-    void testThatValueCannotBePlayedInAPreviouslyPlayedPosition(){
-        game.designBoardPattern();
+    void testThatValueCannotBePlayedInAPreviouslyPlayedPositionByPlayer(){
         game.visualizeBoard();
-        game.play(9);
-        assertThrows(IllegalArgumentException.class, ()-> game.play(9));
+        game.playerOneGamePlay(9);
+        assertEquals("""
+                        EMPTY EMPTY EMPTY 
+                        EMPTY EMPTY EMPTY 
+                        EMPTY EMPTY O 
+                        """
+                , game.visualizeBoard());
+        assertThrows(IllegalArgumentException.class, ()-> game.playerOneGamePlay(9));
     }
-//    @Test
-//    void testThatValueCannotBePlayedInAPreviouslyPlayedPositionByComputer(){
-//        game.designBoardPattern();
-//        game.visualizeBoard();
-//        game.play(Options.O, 1);
-//        game.play(Options.O, 2);
-//        game.play(Options.O, 3);
-//
-//
-//        game.play(Options.O, 7);
-//        game.computerPlay(Options.O);
-//
-//        assertTrue(game.computerHasPlayed());
-//    }
+    @Test
+    void testThatValueCannotBePlayedInAPreviouslyPlayedPositionByComputer(){
+        game.visualizeBoard();
+        game.playerOneGamePlay(1);
+        game.playerOneGamePlay(2);
+        game.playerOneGamePlay(3);
+        game.playerOneGamePlay(7);
+
+        game.computerPlay();
+
+        assertTrue(game.computerHasPlayed());
+    }
 
     @Test
     void testThatSystemCanDetermineWinnerByFirstRow(){
-        game.designBoardPattern();
         game.visualizeBoard();
-        game.play(1);
-        game.play(2);
-        game.play(3);
+        game.playerOneGamePlay(1);
+        game.playerOneGamePlay(2);
+        game.playerOneGamePlay(3);
         game.determineWinner();
 
         assertEquals("""
-                | O | O | O |
-                |___|___|___|
-                |___|___|___|
+                O O O 
+                EMPTY EMPTY EMPTY 
+                EMPTY EMPTY EMPTY 
                 """, game.visualizeBoard());
         assertEquals("You win", game.displayWinner());
     }
     @Test
     void testThatSystemCanDetermineWinnerBySecondRow(){
-        game.designBoardPattern();
         game.visualizeBoard();
-        game.play(4);
-        game.play(5);
-        game.play(6);
+        game.playerOneGamePlay(4);
+        game.playerOneGamePlay(5);
+        game.playerOneGamePlay(6);
         game.determineWinner();
 
         assertEquals("""
-                |___|___|___|
-                | O | O | O |
-                |___|___|___|
+                EMPTY EMPTY EMPTY 
+                O O O 
+                EMPTY EMPTY EMPTY 
                 """, game.visualizeBoard());
         assertEquals("You win", game.displayWinner());
     }
     @Test
     void testThatSystemCanDetermineWinnerByThirdRow(){
-        game.designBoardPattern();
-        game.visualizeBoard();
-        game.play(7);
-        game.play(8);
-        game.play(9);
+        game.playerOneGamePlay(7);
+        game.playerOneGamePlay(8);
+        game.playerOneGamePlay(9);
         game.determineWinner();
 
         assertEquals("""
-                |___|___|___|
-                |___|___|___|
-                | O | O | O |
+                EMPTY EMPTY EMPTY 
+                EMPTY EMPTY EMPTY
+                O O O 
                 """, game.visualizeBoard());
         assertEquals("You win", game.displayWinner());
     }
     @Test
     void testThatSystemCanDetermineWinnerByFirstColumn(){
-        game.designBoardPattern();
         game.visualizeBoard();
-        game.play(1);
-        game.play(4);
-        game.play(7);
+        game.playerOneGamePlay(1);
+        game.playerOneGamePlay(4);
+        game.playerOneGamePlay(7);
         game.determineWinner();
 
         assertEquals("""
-                | O |___|___|
-                | O |___|___|
-                | O |___|___|
+                O EMPTY EMPTY 
+                O EMPTY EMPTY 
+                O EMPTY EMPTY 
                 """, game.visualizeBoard());
         assertEquals("You win", game.displayWinner());
     }
+
     @Test
     void testThatSystemCanDetermineWinnerBySecondColumn(){
-        game.designBoardPattern();
-        game.visualizeBoard();
-        game.play(2);
-        game.play(5);
-        game.play(8);
+        game.playerOneGamePlay(2);
+        game.playerOneGamePlay(5);
+        game.playerOneGamePlay(8);
         game.determineWinner();
 
         assertEquals("""
-                |___| O |___|
-                |___| O |___|
-                |___| O |___|
+                EMPTY O EMPTY 
+                EMPTY O EMPTY 
+                EMPTY O EMPTY 
                 """, game.visualizeBoard());
         assertEquals("You win", game.displayWinner());
     }
+
     @Test
     void testThatSystemCanDetermineWinnerByThirdColumn(){
-        game.designBoardPattern();
-        game.visualizeBoard();
-        game.play(3);
-        game.play(6);
-        game.play(9);
+        game.playerOneGamePlay(3);
+        game.playerOneGamePlay(6);
+        game.playerOneGamePlay(9);
         game.determineWinner();
 
         assertEquals("""
-                |___|___| O |
-                |___|___| O |
-                |___|___| O |
+                EMPTY EMPTY O 
+                EMPTY EMPTY O 
+                EMPTY EMPTY O 
                 """, game.visualizeBoard());
         assertEquals("You win", game.displayWinner());
     }
 
     @Test
     void FirstTestThatSystemCanDetermineWinnerByDiagonal(){
-        game.designBoardPattern();
-        game.visualizeBoard();
-        game.play(1);
-        game.play(5);
-        game.play(9);
+        game.playerOneGamePlay(1);
+        game.playerOneGamePlay(5);
+        game.playerOneGamePlay(9);
         game.determineWinner();
 
         assertEquals("""
-                | O |___|___|
-                |___| O |___|
-                |___|___| O |
+                O EMPTY EMPTY 
+                EMPTY O EMPTY 
+                EMPTY EMPTY O 
                 """, game.visualizeBoard());
         assertEquals("You win", game.displayWinner());
     }
 
     @Test
     void secondTestThatSystemCanDetermineWinnerByDiaognal(){
-        game.designBoardPattern();
-        game.visualizeBoard();
-        game.play(3);
-        game.play(5);
-        game.play(7);
+        game.playerOneGamePlay(3);
+        game.playerOneGamePlay(5);
+        game.playerOneGamePlay(7);
         game.determineWinner();
 
         assertEquals("""
-                |___|___| O |
-                |___| O |___|
-                | O |___|___|
+                EMPTY EMPTY O 
+                EMPTY O EMPTY 
+                O EMPTY EMPTY 
                 """, game.visualizeBoard());
         assertEquals("You win", game.displayWinner());
     }
+
+
 
 }
