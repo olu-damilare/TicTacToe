@@ -32,7 +32,7 @@ public class TicTacToeTest {
                         EMPTY EMPTY O 
                         """
              , game.visualizeBoard());
-        assertTrue(game.playerHasPlayed());
+        assertTrue(game.playerOneHasPlayed());
     }
 
     @Test
@@ -46,7 +46,19 @@ public class TicTacToeTest {
                         EMPTY EMPTY EMPTY 
                         """
                 , game.visualizeBoard());
-        assertTrue(game.playerHasPlayed());
+        assertTrue(game.playerTwoHasPlayed());
+    }
+
+    @Test
+    void testThatTwoPlayersCanPlayAgainstEachOther(){
+        game.playerOneGamePlay(4);
+        game.playerTwoGamePlay(8);
+        assertEquals("""
+                        EMPTY EMPTY EMPTY 
+                        O EMPTY EMPTY 
+                        EMPTY X EMPTY 
+                        """
+                , game.visualizeBoard());
     }
 
     @Test
@@ -55,6 +67,14 @@ public class TicTacToeTest {
         game.computerPlay();
 
         assertTrue(game.computerHasPlayed());
+    }
+    @Test
+    void testThatPlayerOneCannotInputInvalidPositionNumber(){
+        assertThrows(IndexOutOfBoundsException.class, ()-> game.playerOneGamePlay(20));
+    }
+    @Test
+    void testThatPlayerTwoCannotInputInvalidPositionNumber(){
+        assertThrows(IndexOutOfBoundsException.class, ()-> game.playerTwoGamePlay(-1));
     }
 
     @Test
@@ -69,6 +89,7 @@ public class TicTacToeTest {
                 , game.visualizeBoard());
         assertThrows(IllegalArgumentException.class, ()-> game.playerOneGamePlay(9));
     }
+
     @Test
     void testThatValueCannotBePlayedInAPreviouslyPlayedPositionByComputer(){
         game.visualizeBoard();
@@ -97,6 +118,7 @@ public class TicTacToeTest {
                 """, game.visualizeBoard());
         assertEquals("You win", game.displayWinner());
     }
+
     @Test
     void testThatSystemCanDetermineWinnerBySecondRow(){
         game.visualizeBoard();
@@ -112,6 +134,7 @@ public class TicTacToeTest {
                 """, game.visualizeBoard());
         assertEquals("You win", game.displayWinner());
     }
+
     @Test
     void testThatSystemCanDetermineWinnerByThirdRow(){
         game.playerOneGamePlay(7);
@@ -126,6 +149,7 @@ public class TicTacToeTest {
                 """, game.visualizeBoard());
         assertEquals("You win", game.displayWinner());
     }
+    
     @Test
     void testThatSystemCanDetermineWinnerByFirstColumn(){
         game.visualizeBoard();
