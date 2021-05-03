@@ -8,9 +8,11 @@ public class Game {
     private final Options[][] gameBoard = new Options[3][3];
     private boolean playerOneHasPlayed;
     private boolean computerHasPlayed;
-    private boolean playerWin;
+    private boolean playerOneWin;
     private boolean computerWin;
     private boolean playerTwoHasPlayed;
+    private boolean playerTwoWin;
+    private boolean gameEndInDraw = true;
 
     public Game() {
         for (Options[] options : gameBoard) {
@@ -19,21 +21,19 @@ public class Game {
     }
     
     public String visualizeBoard() {
-        String display = "";
-        for (int i = 0; i < gameBoard.length; i++) {
-            for (int j = 0; j < gameBoard[i].length; j++) {
-                if(j != gameBoard[i].length - 1)
-                display += gameBoard[i][j] + " ";
+        StringBuilder display = new StringBuilder();
+        for (Options[] options : gameBoard) {
+            for (int j = 0; j < options.length; j++) {
+                if (j != options.length - 1)
+                    display.append(options[j]).append(" ");
 
                 else
-                    display += gameBoard[i][j] + "\n";
+                    display.append(options[j]).append("\n");
             }
 
         }
-        return display;
+        return display.toString();
     }
-
-    
 
     public void playerOneGamePlay(int position) {
         validatePosition(position);
@@ -84,9 +84,8 @@ public class Game {
         }
         while(!(gameBoard[row][column].equals(EMPTY))) ;
 
-
         gameBoard[row][column] = X;
-       computerHasPlayed = true;
+        computerHasPlayed = true;
     }
 
     public boolean playerOneHasPlayed() {
@@ -105,6 +104,7 @@ public class Game {
         checkSecondRow();
         checkThirdColumn();
         checkThirdRow();
+        checkGameEndInDraw();
     }
 
     private void checkDiagonal(){
@@ -114,10 +114,15 @@ public class Game {
         boolean playerSecondDiagonalCheck = gameBoard[0][2].equals(O) && gameBoard[1][1].equals(O) && gameBoard[2][0].equals(O);
 
         if(playerFirstDiagonalCheck || playerSecondDiagonalCheck)
-            playerWin = true;
+            playerOneWin = true;
 
-        else if(computerFirstDiagonalCheck || computerSecondDiagonalCheck)
-            computerWin = true;
+        else if(computerFirstDiagonalCheck || computerSecondDiagonalCheck) {
+            if(computerHasPlayed)
+                computerWin = true;
+            else
+            playerTwoWin = true;
+        }
+
 
     }
 
@@ -125,29 +130,41 @@ public class Game {
         boolean computerFirstColumnCheck = gameBoard[0][0].equals(X) && gameBoard[1][0].equals(X) && gameBoard[2][0].equals(X);
         boolean playerFirstColumnCheck = gameBoard[0][0].equals(O) && gameBoard[1][0].equals(O) && gameBoard[2][0].equals(O);
         if(playerFirstColumnCheck)
-            playerWin = true;
-        else if(computerFirstColumnCheck)
-            computerWin = true;
+            playerOneWin = true;
+        else if(computerFirstColumnCheck) {
+            if(computerHasPlayed)
+                computerWin = true;
+            else
+                playerTwoWin = true;
+        }
 
     }
     private void checkSecondColumn(){
         boolean computerSecondColumnCheck = gameBoard[0][1].equals(X) && gameBoard[1][1].equals(X) && gameBoard[2][1].equals(X);
         boolean playerSecondColumnCheck = gameBoard[0][1].equals(O) && gameBoard[1][1].equals(O) && gameBoard[2][1].equals(O);
         if(playerSecondColumnCheck)
-            playerWin = true;
+            playerOneWin = true;
 
-        else if(computerSecondColumnCheck)
-            computerWin = true;
+        else if(computerSecondColumnCheck) {
+            if(computerHasPlayed)
+                computerWin = true;
+            else
+                playerTwoWin = true;
+        }
 
     }
     private void checkThirdColumn(){
         boolean computerThirdColumnCheck = gameBoard[0][2].equals(X) && gameBoard[1][2].equals(X) && gameBoard[2][2].equals(X);
         boolean playerThirdColumnCheck = gameBoard[0][2].equals(O) && gameBoard[1][2].equals(O) && gameBoard[2][2].equals(O);
         if(playerThirdColumnCheck)
-            playerWin = true;
+            playerOneWin = true;
 
-        else if(computerThirdColumnCheck)
-            computerWin = true;
+        else if(computerThirdColumnCheck) {
+            if(computerHasPlayed)
+                computerWin = true;
+            else
+                playerTwoWin = true;
+        }
 
     }
 
@@ -155,10 +172,14 @@ public class Game {
         boolean computerFirstRowCheck = gameBoard[1][0].equals(X) && gameBoard[1][1].equals(X) && gameBoard[1][2].equals(X);
         boolean playerFirstRowCheck = gameBoard[1][0].equals(O) && gameBoard[1][1].equals(O) && gameBoard[1][2].equals(O);
         if(playerFirstRowCheck)
-            playerWin = true;
+            playerOneWin = true;
 
-        else if(computerFirstRowCheck)
-            computerWin = true;
+        else if(computerFirstRowCheck) {
+            if(computerHasPlayed)
+                computerWin = true;
+            else
+                playerTwoWin = true;
+        }
 
     }
 
@@ -166,33 +187,54 @@ public class Game {
         boolean computerSecondRowCheck = gameBoard[0][0].equals(X) && gameBoard[0][1].equals(X) && gameBoard[0][2].equals(X);
         boolean playerSecondCheck = gameBoard[0][0].equals(O) && gameBoard[0][1].equals(O) && gameBoard[0][2].equals(O);
         if(playerSecondCheck)
-            playerWin = true;
+            playerOneWin = true;
 
-        else if(computerSecondRowCheck)
-            computerWin = true;
+        else if(computerSecondRowCheck) {
+            if(computerHasPlayed)
+                computerWin = true;
+            else
+                playerTwoWin = true;
+        }
     }
 
     private void checkThirdRow(){
         boolean computerThirdRowCheck = gameBoard[2][0].equals(X) && gameBoard[2][1].equals(X) && gameBoard[2][2].equals(X);
         boolean playerThirdRowCheck = gameBoard[2][0].equals(O) && gameBoard[2][1].equals(O) && gameBoard[2][2].equals(O);
         if(playerThirdRowCheck)
-            playerWin = true;
+            playerOneWin = true;
 
-        else if(computerThirdRowCheck)
-            computerWin = true;
+        else if(computerThirdRowCheck) {
+            if(computerHasPlayed)
+                computerWin = true;
+            else
+                playerTwoWin = true;
+        }
 
     }
 
     public String displayWinner(){
-        if(playerWin)
-            return "You win";
+        if(playerOneWin)
+            return "Player One win";
         else if(computerWin)
-            return "You lose";
+            return "Computer win";
+        else if(playerTwoWin)
+            return "Player Two win";
+        else if(gameEndInDraw)
+            return "Draw";
         else
-            return "Game in progress";
+            return "Game in Progress";
     }
 
+    private void checkGameEndInDraw(){
+        for (Options[] options : gameBoard)
+            for (Options option : options) {
+                if (option == EMPTY) {
+                    gameEndInDraw = false;
+                    break;
+                }
+            }
 
+    }
     public boolean playerTwoHasPlayed() {
         return playerTwoHasPlayed;
     }
