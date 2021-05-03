@@ -116,7 +116,7 @@ public class TicTacToeTest {
                 EMPTY EMPTY EMPTY 
                 EMPTY EMPTY EMPTY 
                 """, game.visualizeBoard());
-        assertEquals("You win", game.displayWinner());
+        assertEquals("Player One win", game.displayWinner());
     }
 
     @Test
@@ -132,7 +132,7 @@ public class TicTacToeTest {
                 O O O 
                 EMPTY EMPTY EMPTY 
                 """, game.visualizeBoard());
-        assertEquals("You win", game.displayWinner());
+        assertEquals("Player One win", game.displayWinner());
     }
 
     @Test
@@ -147,7 +147,7 @@ public class TicTacToeTest {
                 EMPTY EMPTY EMPTY
                 O O O 
                 """, game.visualizeBoard());
-        assertEquals("You win", game.displayWinner());
+        assertEquals("Player One win", game.displayWinner());
     }
     
     @Test
@@ -163,7 +163,7 @@ public class TicTacToeTest {
                 O EMPTY EMPTY 
                 O EMPTY EMPTY 
                 """, game.visualizeBoard());
-        assertEquals("You win", game.displayWinner());
+        assertEquals("Player One win", game.displayWinner());
     }
 
     @Test
@@ -178,7 +178,7 @@ public class TicTacToeTest {
                 EMPTY O EMPTY 
                 EMPTY O EMPTY 
                 """, game.visualizeBoard());
-        assertEquals("You win", game.displayWinner());
+        assertEquals("Player One win", game.displayWinner());
     }
 
     @Test
@@ -193,7 +193,7 @@ public class TicTacToeTest {
                 EMPTY EMPTY O 
                 EMPTY EMPTY O 
                 """, game.visualizeBoard());
-        assertEquals("You win", game.displayWinner());
+        assertEquals("Player One win", game.displayWinner());
     }
 
     @Test
@@ -208,22 +208,43 @@ public class TicTacToeTest {
                 EMPTY O EMPTY 
                 EMPTY EMPTY O 
                 """, game.visualizeBoard());
-        assertEquals("You win", game.displayWinner());
+        assertEquals("Player One win", game.displayWinner());
     }
 
     @Test
-    void secondTestThatSystemCanDetermineWinnerByDiaognal(){
-        game.playerOneGamePlay(3);
-        game.playerOneGamePlay(5);
-        game.playerOneGamePlay(7);
+    void secondTestThatSystemCanDetermineWinnerByDiagonal(){
+        game.playerTwoGamePlay(3);
+        game.playerTwoGamePlay(5);
+        game.playerTwoGamePlay(7);
         game.determineWinner();
 
         assertEquals("""
-                EMPTY EMPTY O 
-                EMPTY O EMPTY 
-                O EMPTY EMPTY 
+                EMPTY EMPTY X 
+                EMPTY X EMPTY 
+                X EMPTY EMPTY 
                 """, game.visualizeBoard());
-        assertEquals("You win", game.displayWinner());
+        assertEquals("Player Two win", game.displayWinner());
+    }
+
+    @Test
+    void TestThatSystemCanDetermineGameEndInDraw(){
+        game.playerOneGamePlay(2);
+        game.playerTwoGamePlay(1);
+        game.playerOneGamePlay(3);
+        game.playerTwoGamePlay(5);
+        game.playerOneGamePlay(4);
+        game.playerTwoGamePlay(6);
+        game.playerTwoGamePlay(7);
+        game.playerTwoGamePlay(8);
+        game.playerOneGamePlay(9);
+        game.determineWinner();
+
+        assertEquals("""
+                X O O
+                O X X
+                X X O
+                """, game.visualizeBoard());
+        assertEquals("Draw", game.displayWinner());
     }
 
 
